@@ -2,11 +2,39 @@ if arg[2] == "debug" then
     require("lldebugger").start()
 end
 
-function love.draw()
-    love.graphics.print('Hello World!', 400, 300)
+local Menu = require "menu"
+local Sidebar = require "sidebar"
+local Level = require "level"
+
+
+function love.load()
+    menu = Menu()
+    sidebar = Sidebar()
+    level = Level()
 end
 
-print("Test Print!")
+function love.draw()
+    if menu.playing then
+        level:draw()
+        sidebar:draw()
+    else
+        menu:draw()
+        
+    end
+
+end
+
+function love.update(dt)
+    if menu.playing then
+        level:update(dt)
+        --sidebar:update(dt)
+    end
+end
+
+function love.mousepressed(x, y, button, istouch, presses)
+    menu:mousepressed(x, y, button, istouch, presses)
+end
+
 
 local love_errorhandler = love.errorhandler
 
@@ -17,3 +45,4 @@ function love.errorhandler(msg)
         return love_errorhandler(msg)
     end
 end
+
