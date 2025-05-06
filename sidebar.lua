@@ -2,14 +2,13 @@ local Object = require "classic"
 local Sidebar = Object:extend()
 
 -- Sidebar dimensions
-local background = love.graphics.newImage("Assets/panel.png")
+local background = love.graphics.newImage("Assets/sidebartest.png")
 
 local sidebarWidth= 200
 local screenHeight = love.graphics.getHeight()
 local margin = 10
 local iconSize = 32
 local fontSize = 20
-local font = love.graphics.newFont("Assets/Stargazer.ttf", fontSize)
 
 -- Load assets
 local lifeIcon = love.graphics.newImage("Assets/life.png")
@@ -22,7 +21,7 @@ local powerUpIcons = {
 -- Initialize player stats
 Sidebar.playerStats = {
     lives = 3,
-    score = 0,
+    score = 152749,
     powerUps = {}
 }
 
@@ -32,7 +31,7 @@ function Sidebar.updateLives(lives)
 end
 
 function Sidebar.addScore(score)
-    Sidebar.playerStats.score = score
+    Sidebar.playerStats.score = Sidebar.playerStats.score + score
 end
 
 function Sidebar.addPowerUp(powerUpType)
@@ -62,30 +61,18 @@ function Sidebar.draw()
 
     -- Draw lives
     love.graphics.setFont(love.graphics.newFont("Assets/Stargazer.ttf", fontSize))
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.print("Lives:", love.graphics.getWidth() - sidebarWidth + margin, margin)
     love.graphics.setColor(1, 1, 1)
 
     for i = 0, Sidebar.playerStats.lives - 1 do
-        love.graphics.draw(
-            lifeIcon,
-            love.graphics.getWidth() - sidebarWidth + margin + (i * (iconSize + 5)),
-            margin + 30,
-            0,
-            1,
-            1
-        )
+        love.graphics.draw(lifeIcon,love.graphics.getWidth() - 175 + (i * (iconSize + 5)),370,0,1,1)
     end
-
-    -- Draw score
-    love.graphics.print(
-        "Score: " .. Sidebar.playerStats.score,
-        love.graphics.getWidth() - sidebarWidth + margin,
+    love.graphics.print(Sidebar.playerStats.score,
+        love.graphics.getWidth() - 200 + margin + 250,
         margin + 70
     )
 
     -- Draw power-ups
-    love.graphics.print("Power-ups:", love.graphics.getWidth() - sidebarWidth + margin, margin + 120)
+    love.graphics.print("Power-ups:", love.graphics.getWidth() - 180 + margin, 450, 0, 1, 1)
 
     for i, powerUp in ipairs(Sidebar.playerStats.powerUps) do
         local icon = powerUpIcons[powerUp]
