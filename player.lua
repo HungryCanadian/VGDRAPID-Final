@@ -19,7 +19,9 @@ function Player:new()
     self.flickerTime = 0
     self.flickerCount = 0
     self.spread = false
-    self.shield = true
+    self.shield = false
+    self.spreadTimer = 0
+    self.shieldTimer = 0
 end
 
 function Player:load()
@@ -27,6 +29,20 @@ function Player:load()
 end
 
 function Player:update(dt)
+
+    if self.spread then
+        self.spreadTimer = self.spreadTimer - dt
+        if self.spreadTimer <= 0 then
+            self.spread = false
+        end
+    end
+
+    if self.shield then
+        self.shieldTimer = self.shieldTimer - dt
+        if self.shieldTimer <= 0 then
+            self.shield = false
+        end
+    end
  if not self.shield then
     self:checkCollisions()
  end
@@ -103,6 +119,16 @@ function Player:draw()
     love.graphics.setColor(1, 1, 1, 1) -- Reset to default color
 end
 
+function Player:togglePowerUp(powerUpType)
+    if powerUpType == "spread" then
+        self.spread = true
+        self.spreadTimer = 5
+    elseif powerUpType == "shield" then
+        self.shield = true
+        self.shieldTimer = 5
+    end
+end
+
 
 function Player:keypressed(key)
     if key == "space" then
@@ -141,7 +167,7 @@ function Player:playerHit()
         self.flickerCount = 0
 
     self.lives = self.lives - 1 
-    sidebar.updateLives(self.lives)
+    sidebar:updateLives(self.lives)
 
         if self.lives <= 0 then
             print("Game Over")
