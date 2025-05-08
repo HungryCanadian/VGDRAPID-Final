@@ -174,6 +174,7 @@ end
 
 -- Reset the game to start a new round
 function Level:resetGame()
+    music:stop()
     playerLives = 3
     sidebar.playerStats.lives = playerLives
     player.lives = playerLives

@@ -2,16 +2,10 @@ local Object = require "classic"
 local Menu = Object:extend()
 
 function Menu:new()
-    self.options = {
-        {text = "Start Game", action = 
-        function() print("Starting Game...") 
-         self.playing = true
-        end},
-        {text = "Exit", action = 
-        function() 
-            love.event.quit() 
-        end},
-    }
+    self.options = {{text = "Start Game", action = function() self.playing = true end},
+                    {text = "Exit", action = function() love.event.quit() end},
+}
+
     self.font = love.graphics.newFont(24)
     self.buttonWidth = 250
     self.buttonHeight = 100
@@ -20,6 +14,8 @@ function Menu:new()
     self.centerX = love.graphics.getWidth() / 2 - self.buttonWidth / 2
     self.playing = false
     self.backgroundImage = love.graphics.newImage("Assets/casteroids.png")
+    self.music = love.audio.newSource("Assets/Audio/8bit.wav", "stream")
+    self.startsfx = love.audio.newSource("Assets/Audio/GameStart.mp3", "static")
 end
 
 function Menu:isMouseOverButton(x, y, buttonIndex)
@@ -33,12 +29,17 @@ function Menu:mousepressed(x, y, button, istouch, presses)
         for i, _ in ipairs(self.options) do
             if self:isMouseOverButton(x, y, i) then
                 self.options[i].action()
+                self.music:stop()
+                self.startsfx:play()
             end
         end
     end
 end
 
 function Menu:draw()
+    if not self.music:isPlaying() then
+        self.music:play()
+    end
     love.graphics.clear(0.2, 0.2, 0.2)
     love.graphics.setFont(self.font)
     love.graphics.setColor(0.2,0.2,0.2)

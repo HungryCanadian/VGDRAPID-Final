@@ -22,6 +22,7 @@ function Player:new()
     self.shield = false
     self.spreadTimer = 0
     self.shieldTimer = 0
+    self.bulletsfx = love.audio.newSource("Assets/Audio/Fire.wav", "static" )
 end
 
 function Player:load()
@@ -96,6 +97,11 @@ function Player:update(dt)
         end
 end
 
+function Player:playSfx()
+    local sound = self.bulletsfx:clone() -- Clone the original source
+    sound:play() -- Play the cloned source
+end
+
 function Player:draw()
     if self.shield then 
         love.graphics.draw(
@@ -145,7 +151,7 @@ function Player:keypressed(key)
             print("Error: Bullets table is nil!")
             return
         end
-
+        player:playSfx()
         table.insert(bullets, Bullet(spawnX, spawnY, self.rotation))
         if self.spread then
             table.insert(bullets, Bullet(spawnX, spawnY, self.rotation + math.rad(5)))
