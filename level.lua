@@ -145,14 +145,14 @@ function Level:drawGameOver()
     love.graphics.printf("Game Over", 0, height / 3, width, "center")
 
     -- Draw Retry Button
-    love.graphics.setColor(0, 1, 0, 1)  -- Green button color
+    love.graphics.setColor(0, 1, 0, 0.4)  -- Green button color
     love.graphics.rectangle("fill", 100, 400, 200, 50)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(love.graphics.newFont(24))
     love.graphics.printf("Retry", 100, 415, 200, "center")
 
     -- Draw Quit Button
-    love.graphics.setColor(1, 0, 0, 1)  -- Red button color
+    love.graphics.setColor(1, 0, 0, 0.4)  -- Red button color
     love.graphics.rectangle("fill", 100, 500, 200, 50)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Quit", 100, 515, 200, "center")
@@ -176,13 +176,14 @@ end
 function Level:resetGame()
     playerLives = 3
     sidebar.playerStats.lives = playerLives
+    player.lives = playerLives
     sidebar.playerStats.score = 0
 
     enemies = {}
     bullets = {}
 
-
-    gameState = "playing"
+ menu.playing = false
+ gameState = "playing"
 end
 
 return Level
