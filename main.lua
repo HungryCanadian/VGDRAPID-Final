@@ -5,17 +5,14 @@ end
 local Menu = require "menu"
 local Sidebar = require "sidebar"
 local Level = require "level"
-local Bullet = require "bullet"
 local Player = require "player"
-
-table_of_bullets = {}
 
 
 function love.load()
+    love.window.setTitle("Caspiran Asteroids")
     menu = Menu()
     sidebar = Sidebar()
     level = Level()
-    bullet = Bullet()
     player = Player()
 end
 
@@ -24,9 +21,6 @@ function love.draw()
         level:draw()
         sidebar:draw()
         player:draw()
-        for _, bullet in ipairs(table_of_bullets) do
-            bullet:draw()
-        end
     else
         menu:draw()
     end
@@ -37,18 +31,15 @@ function love.update(dt)
     if menu.playing then
         level:update(dt)
         player:update(dt)
-        for i, bullet in ipairs(table_of_bullets) do
+        for _, bullet in ipairs(bullets) do
             bullet:update(dt)
-            bullet:checkCollision(level:getEnemies())
-            if bullet.dead then
-                table.remove(table_of_bullets, i)
-            end
         end
     end
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
     menu:mousepressed(x, y, button, istouch, presses)
+    level:mousepressed(x, y, button, istouch, presses)
 end
 
 function love.keypressed(key, scancode, isrepeat)

@@ -17,7 +17,8 @@ local lifeIcon = love.graphics.newImage("Assets/life.png")
 -- Initialize player stats
 Sidebar.playerStats = {
     lives = 3,
-    score = 152749,
+    highscore = 1337,
+    score = 0,
     powerUps = {} 
 }
 
@@ -25,15 +26,16 @@ Sidebar.playerStats = {
 local powerUps = PowerUps()
 
 function Sidebar:new()
-    -- Example initial active power-ups
-    powerUps:spawn("spread", 100, 100)
-    powerUps:spawn("bomb", 200, 200)
-    powerUps:spawn("shield", 300, 300)
+
 end
 
 function Sidebar:update(dt)
     powerUps:update(dt)
     powerUps:checkCollision(player)
+
+    if self.playerStats.score >= self.playerStats.highscore then
+        self.playerStats.highscore = self.playerStats.score
+    end
 
     -- Update sidebar power-ups
     for i = #Sidebar.playerStats.powerUps, 1, -1 do
@@ -62,6 +64,12 @@ end
 
 function Sidebar:addScore(score)
     Sidebar.playerStats.score = Sidebar.playerStats.score + score
+
+    print("Score: " .. Sidebar.playerStats.score)
+
+    if Sidebar.playerStats.score % 1000 == 0 then
+        self:updateLives(Sidebar.playerStats.lives + 1)
+    end
 end
 
 function Sidebar:addPowerUp(powerUpType)
@@ -83,28 +91,34 @@ end
 
 function Sidebar:draw()
     love.graphics.draw(background, love.graphics.getWidth() - sidebarWidth, 0, 0, 0.51, 0.72)
+
     -- Draw lives
-    love.graphics.setFont(love.graphics.newFont("Assets/Stargazer.ttf", fontSize))
+    love.graphics.setFont(love.graphics.newFont(fontSize))
     for i = 0, Sidebar.playerStats.lives - 1 do
         love.graphics.draw(lifeIcon, love.graphics.getWidth() - 175 + (i * (iconSize + 5)), 370, 0, 1, 1)
     end
-    love.graphics.print(Sidebar.playerStats.score, love.graphics.getWidth() - 200 + margin + 250, margin + 70)
 
-    -- Draw power-ups in the sidebar
-    love.graphics.print("Power-ups:", love.graphics.getWidth() - 180 + margin, 450, 0, 1, 1)
+    -- Draw score
+    love.graphics.print(Sidebar.playerStats.highscore, love.graphics.getWidth() - 130,  60)
+    love.graphics.print(Sidebar.playerStats.score, love.graphics.getWidth() - 130,  200)
+
+    -- Draw power-ups
+    love.graphics.print("Power-ups:", love.graphics.getWidth() - sidebarWidth + margin, 450, 0, 1, 1)
     for i, powerUp in ipairs(Sidebar.playerStats.powerUps) do
         local icon = powerUps:getIcon(powerUp.type)
         if icon then
             if powerUp.flashing then
                 if math.floor(powerUp.timer * 10) % 2 == 0 then
-                    love.graphics.draw(icon, love.graphics.getWidth() - 180 + margin + ((i - 1) * (iconSize + 15)), 475, 0, 0.5, 0.5)
+                    love.graphics.draw(icon, love.graphics.getWidth() - sidebarWidth + margin + ((i - 1) * (iconSize + 15)), 475, 0, 0.5, 0.5)
                 end
             else
-                love.graphics.draw(icon, love.graphics.getWidth() - 180 + margin + ((i - 1) * (iconSize + 15)), 475, 0, 0.5, 0.5)
+                love.graphics.draw(icon, love.graphics.getWidth() - sidebarWidth + margin + ((i - 1) * (iconSize + 15)), 475, 0, 0.5, 0.5)
             end
         end
     end
+
     powerUps:draw()
 end
+
 
 return Sidebar

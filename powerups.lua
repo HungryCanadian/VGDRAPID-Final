@@ -4,7 +4,7 @@ local PowerUps = Object:extend()
 local powerUpIcons = {
     spread = love.graphics.newImage("Assets/spread.png"),
     shield = love.graphics.newImage("Assets/shield.png"),
-    bomb = love.graphics.newImage("Assets/bomb.png")
+    --bomb = love.graphics.newImage("Assets/bomb.png")
 }
 
 local activePowerUps = {}

@@ -13,12 +13,13 @@ function Menu:new()
         end},
     }
     self.font = love.graphics.newFont(24)
-    self.buttonWidth = 200
-    self.buttonHeight = 50
+    self.buttonWidth = 250
+    self.buttonHeight = 100
     self.buttonSpacing = 20
-    self.startY = 400
+    self.startY = 350
     self.centerX = love.graphics.getWidth() / 2 - self.buttonWidth / 2
     self.playing = false
+    self.backgroundImage = love.graphics.newImage("Assets/casteroids.png")
 end
 
 function Menu:isMouseOverButton(x, y, buttonIndex)
@@ -40,6 +41,7 @@ end
 function Menu:draw()
     love.graphics.clear(0.2, 0.2, 0.2)
     love.graphics.setFont(self.font)
+    love.graphics.setColor(0.2,0.2,0.2)
 
     for i, item in ipairs(self.options) do
         local buttonY = self.startY + (i - 1) * (self.buttonHeight + self.buttonSpacing)
@@ -56,6 +58,8 @@ function Menu:draw()
         love.graphics.setColor(0, 0, 0) -- Black for text
         love.graphics.printf(item.text, self.centerX, buttonY + self.buttonHeight / 4, self.buttonWidth, "center")
     end
+    love.graphics.setColor(1, 1, 1) -- White for text
+    love.graphics.draw(self.backgroundImage, 0, 0, 0, 1.75, 1.35)
 end
 
 

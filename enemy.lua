@@ -1,28 +1,29 @@
 local object = require "classic"
 local Enemy = object:extend()
 
-function Enemy:new(x, y, w, h, dx, dy)
+function Enemy:new(x, y, dx, dy)
     self.x = x
     self.y = y
-    self.w = w
-    self.h = h
     self.dx = dx
     self.dy = dy
 
-    local types = { "asteroid", "planet", "meteor" }
+    local types = { "asteroid", "meteor" }
     self.type = types[math.random(#types)]
 
     if self.type == "asteroid" then
         self.image = love.graphics.newImage("Assets/asteroid.png")
-    elseif self.type == "planet" then
-        self.image = love.graphics.newImage("Assets/planet.png")
     elseif self.type == "meteor" then
         self.image = love.graphics.newImage("Assets/meteor.png")
     end
+
+    self.w = self.image:getWidth()
+    self.h = self.image:getHeight()
 end
 
 function Enemy:setImage(imagePath)
     self.image = love.graphics.newImage(imagePath)
+    self.w = self.image:getWidth()
+    self.h = self.image:getHeight()
 end
 
 function Enemy:update(dt)
@@ -32,6 +33,8 @@ function Enemy:update(dt)
     -- Bounce back if hitting screen edges
     if self.x < 0 or self.x + self.w > (love.graphics.getWidth() - 180) then
         self.dx = -self.dx
+    elseif self.y < 0 or self.y + self.h > (love.graphics.getHeight()) then
+        self.dy = -self.dy
     end
 end
 
@@ -47,26 +50,26 @@ function Enemy:checkCollision(bullet)
 end
 
 function Enemy:split()
-    local newType
-    local children = {}
-
-    if self.type == "planet" then
-        newType = "meteor"
-    elseif self.type == "meteor" then
-        newType = "asteroid"
-    else
-        return children -- No splitting for asteroids
+    if self.type ~= "meteor" then
+        print("Cannot split non-meteor enemy: " .. self.type)
+        return {}
     end
 
-    -- Create two new children with adjusted size and random velocities
+    local asteroids = {}
+    print("Splitting meteor into smaller asteroids")
+    
     for i = 1, 2 do
         local dx = self.dx + math.random(-50, 50)
         local dy = self.dy + math.random(-50, 50)
-        local child = Enemy(self.x, self.y, self.w / 2, self.h / 2, dx, dy, newType)
-        table.insert(children, child)
+        local asteroid = Enemy(self.x, self.y, dx, dy)
+        
+        asteroid.type = "asteroid"
+        asteroid:setImage("Assets/asteroid.png")
+        
+        table.insert(asteroids, asteroid)
     end
 
-    return children
+    return asteroids
 end
 
 return Enemy

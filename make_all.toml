@@ -1,4 +1,4 @@
-name = "Game"
+name = "Caspiran Asteroids"
 default_targets = ["win32", "win64"]
 build_directory = "bin"
 love_files = [

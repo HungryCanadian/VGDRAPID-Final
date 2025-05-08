@@ -7,7 +7,7 @@ function Bullet:new(x, y, angle)
     self.x = x
     self.y = y
     self.angle = angle or -math.pi / 2 
-    self.speed = 350
+    self.speed = 400
 
     self.w = self.image:getWidth()
     self.h = self.image:getHeight()
@@ -39,6 +39,10 @@ function Bullet:checkCollision(objects)
 end
 
 function Bullet:update(dt)
+    if not dt then
+        print("Error: dt is nil in Bullet:update!")
+        return
+    end
     local dx = math.cos(self.angle - math.rad(90)) * self.speed * dt
     local dy = math.sin(self.angle - math.rad(90)) * self.speed * dt
     self.x = self.x + dx

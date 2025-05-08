@@ -81,13 +81,19 @@ function Player:update(dt)
  local mouseX, mouseY = love.mouse.getPosition()
  self.rotation = math.atan2(mouseY - self.y, mouseX - self.x) + math.rad(90)
 
- local window_width = love.graphics.getWidth()
+ local windowWidth = love.graphics.getWidth()
+    local windowHeight = love.graphics.getHeight()
 
     if self.x < 0 then
     self.x = 0
-    elseif self.x + self.w > window_width then
-    self.x = window_width - self.w
+    elseif self.x + self.w > windowWidth then
+    self.x = windowWidth - self.w
     end
+    if self.y < 0 then
+        self.y = 0
+        elseif self.y + self.h > windowHeight then
+        self.y = windowHeight - self.h
+        end
 end
 
 function Player:draw()
@@ -132,13 +138,18 @@ end
 
 function Player:keypressed(key)
     if key == "space" then
-        local spawnX= self.x + self.w / 2
+        local spawnX = self.x + self.w / 2
         local spawnY = self.y + self.h / 2
 
-        table.insert(table_of_bullets, Bullet(spawnX, spawnY, self.rotation))
+        if not bullets then
+            print("Error: Bullets table is nil!")
+            return
+        end
+
+        table.insert(bullets, Bullet(spawnX, spawnY, self.rotation))
         if self.spread then
-            table.insert(table_of_bullets, Bullet(spawnX, spawnY, self.rotation + math.rad(5)))
-            table.insert(table_of_bullets, Bullet(spawnX, spawnY, self.rotation - math.rad(5)))
+            table.insert(bullets, Bullet(spawnX, spawnY, self.rotation + math.rad(5)))
+            table.insert(bullets, Bullet(spawnX, spawnY, self.rotation - math.rad(5)))
         end
     end
 end
