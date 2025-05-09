@@ -1,0 +1,14 @@
+VGDRAPID Final Assignment
+Jonathon Cannon
+Itch link:https://hungrycanadian.itch.io/caspiran-asteroids
+GitHub Link:https://github.com/HungryCanadian/VGDRAPID-Final
+
+W,A,S,D for movement.
+The ship will always point towards your mouse
+SPACE to shoot a laser
+
+There is two powerups you can get, a shield or a spread shot. each powerup is active for only 5 seconds!
+try and beat your best score!
+
+No HighScores will be saved between instances of the game
+
