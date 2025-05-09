@@ -9,12 +9,13 @@ local background = love.graphics.newImage("Assets/Background.png")
 local music = love.audio.newSource("Assets/Audio/6.ogg", "stream")
 
 
-local gameState = "playing"
+playing = false
 
 
 enemies = {}
 bullets = {}
 powerUps = PowerUps()
+
 local spawnTimer = 0
 local spawnInterval = 0.75
 
@@ -28,7 +29,7 @@ function Level:getEnemies()
 end
 
 local function spawnEnemy()
-    local spawnX = math.random(0, love.graphics.getWidth())
+    local spawnX = math.random(0, love.graphics.getWidth() - 200)
     local spawnY = math.random(0, love.graphics.getHeight())
     local speedX = math.random(-100, 100)
     local speedY = math.random(-100, 100)
@@ -80,12 +81,12 @@ end
 -- Check if player has lost all lives
 local function checkGameOver()
     if player.lives <= 0 then
-        gameState = "gameover"
+        playing = false
     end
 end
 
 function Level:update(dt)
-    if gameState == "playing" then
+    if playing then
         if not music:isPlaying() then
             music:play()
         end
@@ -110,7 +111,7 @@ function Level:update(dt)
 end
 
 function Level:draw()
-    if gameState == "playing" then
+    if playing then
         love.graphics.draw(background, 0, 0, 0, 1, 0.4)
 
         for _, enemy in ipairs(enemies) do
@@ -122,7 +123,7 @@ function Level:draw()
         for _, bullet in ipairs(bullets) do
             bullet:draw()
         end
-    elseif gameState == "gameover" then
+    elseif not playing then
         self:drawGameOver()
     end
 end
@@ -130,8 +131,7 @@ end
 
 -- Draw the Game Over screen with options to retry or quit
 function Level:drawGameOver()
-    if gameState == "gameover" then
-
+    if not playing then
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
 
@@ -161,7 +161,7 @@ end
 
 -- Check for mouse clicks on the Game Over screen buttons
 function Level:mousepressed(x, y, button, istouch, presses)
-    if gameState == "gameover" then
+    if not playing then
         if x >= 100 and x <= 300 and y >= 400 and y <= 450 then
             -- Retry button clicked
             self:resetGame()
@@ -182,9 +182,10 @@ function Level:resetGame()
 
     enemies = {}
     bullets = {}
+    powerUps:reset()
 
  menu.playing = false
- gameState = "playing"
+ playing = true
 end
 
 return Level

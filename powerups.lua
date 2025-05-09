@@ -31,13 +31,19 @@ function PowerUps:update(dt)
 
 end
 
+function PowerUps:reset()
+    activePowerUps = {}
+end
+
 function PowerUps:draw()
+    if playing then 
     for _, powerUp in ipairs(activePowerUps) do
         local icon = powerUpIcons[powerUp.type]
         if icon then
                 love.graphics.draw(icon, powerUp.x, powerUp.y, 0, 0.5, 0.5)
             end
         end
+    end
 end
 
 function PowerUps:checkCollision(player)

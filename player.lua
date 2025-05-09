@@ -15,7 +15,7 @@ function Player:new()
     self.dx = 0
     self.dy = 0
     self.lives = 3
-    self.invulnerable = false
+    self.invulnerable = false 
     self.flickerTime = 0
     self.flickerCount = 0
     self.spread = false
@@ -23,6 +23,7 @@ function Player:new()
     self.spreadTimer = 0
     self.shieldTimer = 0
     self.bulletsfx = love.audio.newSource("Assets/Audio/Fire.wav", "static" )
+    self.bulletsfx:setVolume(0.3)
 end
 
 function Player:load()
@@ -83,12 +84,12 @@ function Player:update(dt)
  self.rotation = math.atan2(mouseY - self.y, mouseX - self.x) + math.rad(90)
 
  local windowWidth = love.graphics.getWidth()
-    local windowHeight = love.graphics.getHeight()
+ local windowHeight = love.graphics.getHeight()
 
     if self.x < 0 then
     self.x = 0
-    elseif self.x + self.w > windowWidth then
-    self.x = windowWidth - self.w
+    elseif self.x + self.w > windowWidth -200 then
+    self.x = windowWidth - 200 - self.w
     end
     if self.y < 0 then
         self.y = 0

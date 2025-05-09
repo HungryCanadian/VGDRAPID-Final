@@ -28,11 +28,13 @@ function love.draw()
 end
 
 function love.update(dt)
-    if menu.playing then
-        level:update(dt)
-        player:update(dt)
-        for _, bullet in ipairs(bullets) do
-            bullet:update(dt)
+    if playing then
+        if menu.playing == true then
+            level:update(dt)
+            player:update(dt)
+            for _, bullet in ipairs(bullets) do
+              bullet:update(dt)
+            end
         end
     end
 end
@@ -43,13 +45,9 @@ function love.mousepressed(x, y, button, istouch, presses)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-    if key == "space" and menu.playing then
-        player:keypressed(key, scancode, isrepeat)
-    end
-
-    if key == "escape" then
-        love.event.quit()
-    end
+        if key == "space" and menu.playing then
+            player:keypressed(key, scancode, isrepeat)
+        end
 end
 
 
